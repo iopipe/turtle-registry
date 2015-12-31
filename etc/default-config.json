@@ -1,0 +1,24 @@
+{
+  "listen_port": 80,
+  "session": {
+    "secret": ""
+  },
+  "filestore": "./storage/localfs",
+  "metastore": "./meta/neo4j",
+  "!": {"filestore": "./storage/s3"},
+  "storage": {
+    "s3": {
+      "region": "us-west-2",
+      "bucket": "iopipe-index",
+      "access_key": "",
+      "secret_key": ""
+    }
+  },
+  "meta": {
+    "neo4j": {
+      "url": "http://docker-neo4j:7474"
+    }
+  },
+  "jwt_key": "",
+  "jwt_audience": ""
+}

@@ -1,0 +1,55 @@
+#
+# Requires:
+#  - VIRTUAL_HOST option set to domain.
+#  - EMAIL_ADDRESS set to a valid email.
+#
+# Expect letsencrypt should run, generate certs, then exit.
+# other services will expect these ports (80, 443) but will
+# be marked for 'restart: always' so that they will continue
+# trying to launch as long as letsencrypt is running.
+#
+# Long-term, it would be great if docker-compose could wait
+# on a selected containers to exit before launching others.
+#
+
+neo4j:
+    image: neo4j/neo4j
+    hostname: docker-neo4j
+    ports:
+        - "7474:7474"
+        - "127.0.0.1:1337:1337"
+letsencrypt:
+    image: quay.io/letsencrypt/letsencrypt:latest
+    volumes:
+        - .letsencrypt/etc:/etc/letsencrypt
+        - .letsencrypt/var:/var/lib/letsencrypt
+    ports:
+        - "80:80"
+        - "443:443"
+    command: --agree-tos --agree-dev-preview auth -d ${VIRTUAL_HOST} --email ${EMAIL_ADDRESS}
+dynalite:
+    image: risaacson/dynalite
+    ports:
+        - "8080:8080"
+web:
+    build: .
+    environment:
+        - VIRTUAL_HOST
+    ports:
+        - "8080:80"
+    restart: always
+    volumes:
+        - ./etc/config.json:/usr/src/app/etc/config.json
+    links:
+        - neo4j
+ssl:
+    image: jwilder/nginx-proxy
+    environment:
+        - VIRTUAL_HOST
+    volumes:
+        - .letsencrypt/etc/live/privkey.pem:/etc/nginx/certs/${VIRTUAL_HOST}.key
+        - .letsencrypt/etc/live/fullchain.pem:/etc/nginx/certs/${VIRTUAL_HOST}.crt
+        - /var/run/docker.sock:/tmp/docker.sock.ro
+    ports:
+        - "443:443"
+    restart: always

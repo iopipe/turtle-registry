@@ -1,0 +1,21 @@
+{
+  "name": "iopipe-code-registry",
+  "private": true,
+  "version": "0.0.1",
+  "description": "IOpipe code registry",
+  "author": "Eric Windisch",
+  "dependencies": {
+    "express": "3.2.4",
+    "express-session": "1.12.1",
+    "express-jwt": "",
+    "oauthio": "0.3.3",
+    "body-parser": "1.14.1",
+    "cypher-stream": "",
+    "legerdemain": "",
+    "extend": "",
+    "aws-sdk": "",
+    "iopipe": "",
+    "acorn": ""
+  },
+  "scripts": { "start": "node app/express.js" }
+}
