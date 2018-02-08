@@ -1,5 +1,7 @@
 # Code Registry
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/iopipe/turtle-registry.svg)](https://greenkeeper.io/)
+
 Service for storing and searching for functions. These may be
 pushed, pulled, and executed by
 [IOpipe](https://github.com/iopipe/iopipe) on a variety
